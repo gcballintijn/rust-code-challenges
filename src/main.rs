@@ -1,17 +1,16 @@
-fn median(values: Vec<f32>) -> Option<f32> {
+fn median(mut values: Vec<f32>) -> Option<f32> {
     if values.is_empty() {
         return None;
     }
 
-    let mut sorted = values.clone(); // do not clobber original array!
-    sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
-    let middle = sorted.len() / 2;
+    values.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    let middle = values.len() / 2;
 
     Some({
-        if sorted.len() % 2 == 0 {
-            (sorted[middle - 1] + sorted[middle]) / 2.0
+        if values.len() % 2 == 0 {
+            (values[middle - 1] + values[middle]) / 2.0
         } else {
-            sorted[middle]
+            values[middle]
         }
     })
 }

@@ -1,15 +1,15 @@
 // use std::collections::BTreeSet;
-// fn unique(a: Vec<i32>) -> Vec<i32> {
-//     let value_set = a.into_iter().collect::<BTreeSet<i32>>();
+// fn unique(values: Vec<i32>) -> Vec<i32> {
+//     let value_set: BTreeSet<i32> = values.into_iter().collect();
 //     value_set.into_iter().collect()
 // }
 
 // advanced 1: use generic types
 // use std::collections::BTreeSet;
-// fn unique<T>(a: Vec<T>) -> Vec<T>
+// fn unique<T>(values: Vec<T>) -> Vec<T>
 //     where T: Ord
 // {
-//     let value_set = a.into_iter().collect::<BTreeSet<T>>();
+//     let value_set: BTreeSet<T> = values.into_iter().collect();
 //     value_set.into_iter().collect::<Vec<T>>()
 // }
 
@@ -18,17 +18,18 @@
 //     todo!();
 // }
 // use std::collections::BTreeSet;
-// fn unique<S, T>(a: S) -> Vec<T>
+// fn unique<S, T>(values: S) -> Vec<T>
 //     where S: IntoIterator<Item = T>,
 //           T: Ord + Copy,
 // {
 //     let mut duplicates: BTreeSet<T> = BTreeSet::new();
-//     a.into_iter().filter(|x| if !duplicates.contains(x) {
-//         duplicates.insert(*x);
-//         true
-//     } else {
-//         false
-//     }).collect::<Vec<T>>()
+//     values.into_iter()
+//         .filter(|x| if !duplicates.contains(x) {
+//             duplicates.insert(*x);
+//             true
+//         } else {
+//             false
+//         }).collect::<Vec<T>>()
 // }
 
 // advanced 3: use iterators
@@ -36,11 +37,11 @@
 //     todo!();
 // }
 use std::collections::BTreeSet;
-fn unique<S, T>(a: S) -> Vec<T>
+fn unique<S, T>(values: S) -> Vec<T>
     where S: IntoIterator<Item = T>,
           T: Ord,
 {
-    let value_set = a.into_iter().collect::<BTreeSet<T>>();
+    let value_set: BTreeSet<T> = values.into_iter().collect();
     value_set.into_iter().collect::<Vec<T>>()
 }
 

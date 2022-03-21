@@ -1,5 +1,17 @@
+use std::cmp::Ordering;
+
 fn sort_usernames<T: AsRef<str>>(usernames: &mut Vec<T>) {
-    todo!();
+    usernames.sort_by(|n1, n2| {
+        let n1 = n1.as_ref().to_lowercase();
+        let n2 = n2.as_ref().to_lowercase();
+        if n1 < n2 {
+            Ordering::Less
+        } else if n1 > n2 {
+            Ordering::Greater
+        } else {
+            Ordering::Equal
+        }
+    });
 }
 
 fn main() {

@@ -1,7 +1,18 @@
+use std::fmt::{Display, Formatter, Result};
+
 #[derive(Debug, PartialEq)]
 enum Pulse {
     Short,
     Long,
+}
+
+impl Display for Pulse {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Pulse::Short => write!(f, "."),
+            Pulse::Long => write!(f, "_"),
+        }
+    }
 }
 
 /// Represents a single character
@@ -14,12 +25,31 @@ trait MorseCode {
     fn to_morse_code(&self) -> Message;
 }
 
-impl std::fmt::Display for Pulse {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Pulse::Short => write!(f, "."),
-            Pulse::Long => write!(f, "_"),
+impl MorseCode for String {
+    fn to_morse_code(&self) -> Message {
+        let mut result = Vec::new();
+        for ch in self.to_lowercase().chars() {
+            match to_morse_code_letter(ch) {
+                Some(l) => result.push(l),
+                None => (),
+            }
         }
+        result
+    }
+}
+
+fn to_morse_code_letter(ch: char) -> Option<Letter> {
+    use Pulse::*;
+
+    match ch {
+        'h' => Some(vec![Short, Short, Short, Short]),
+        'e' => Some(vec![Short]),
+        'l' => Some(vec![Short, Long, Short, Short]),
+        'o' => Some(vec![Long, Long, Long]),
+        'w' => Some(vec![Short, Long, Long]),
+        'r' => Some(vec![Short, Long, Short]),
+        'd' => Some(vec![Long, Short, Short]),
+        _ => None            
     }
 }
 
@@ -39,16 +69,6 @@ fn main() {
         .to_morse_code();
     
     print_morse_code(&greeting);
-}
-
-
-impl std::fmt::Display for Pulse {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Short => write!(f, "."), 
-            Self::Long => write!(f, "_"),
-        }
-    }
 }
 
 #[test]

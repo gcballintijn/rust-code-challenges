@@ -1,9 +1,12 @@
 fn sum_with_missing(numbers: Vec<Option<i32>>) -> i32 {
-    todo!();
+    numbers.iter().flatten().fold(0, |acc, val| acc + val)
 }
 
 fn main() {
-    println!("");
+    let numbers = vec![Some(1), None, Some(5), None, Some(4)];
+    print!("The sum of {:?}", numbers);
+    let sum = sum_with_missing(numbers);
+    println!(" is {}.", sum);
 }
 
 

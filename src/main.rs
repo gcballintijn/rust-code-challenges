@@ -1,15 +1,56 @@
 use std::str::FromStr;
 
+#[derive(Debug)]
 struct Isbn {
     raw: String,
     digits: Vec<u8>,
 }
 
+#[derive(Debug)]
+enum IsbnError {
+    TooShort,
+    TooLong,
+    BadChecksum,
+}
+
 impl FromStr for Isbn {
-    type Err = (); // TODO: replace with appropriate type
+    type Err = IsbnError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        todo!();        
+        let raw = s.to_string();
+        let mut digits = Vec::new();
+
+        for ch in s.chars() {
+            let digit = match ch {
+                '0' => 0,
+                '1' => 1,
+                '2' => 2,
+                '3' => 3,
+                '4' => 4,
+                '5' => 5,
+                '6' => 6,
+                '7' => 7,
+                '8' => 8,
+                '9' => 9,
+                _ => continue,
+            };
+            digits.push(digit);
+        }
+
+        if digits.len() < 13 {
+            return Err(IsbnError::TooShort);
+        } else if digits.len() > 13 {
+            return Err(IsbnError::TooLong);
+        }
+
+        let given_check = digits.pop().unwrap();
+        let computed_check = calculate_check_digit(digits.as_slice());
+
+        if given_check != computed_check {
+            Err(IsbnError::BadChecksum)
+        } else {
+            Ok(Isbn {raw, digits})
+        }
     }
 }
 
@@ -21,13 +62,25 @@ impl std::fmt::Display for Isbn {
 
 // https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-13_check_digit_calculation
 fn calculate_check_digit(digits: &[u8]) -> u8 {
-    todo!()
+
+    let weighted_sum: u8 = digits
+        .iter()
+        .enumerate()
+        .map(|(i, v)| if i % 2 == 0 {
+            v * 1
+        } else {
+            v * 3
+        })
+        .sum();
+
+    (10 - (weighted_sum % 10)) % 10
 }
 
 fn main() {
     let rust_in_action: Isbn = "978-3-16-148410-0".parse().unwrap();
 
     println!("Rust in Action's ISBN-13 ({})is valid!", rust_in_action);
+    println!("Its digits are {:?}.", rust_in_action.digits);
 }
 
 #[test]

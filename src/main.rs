@@ -3,7 +3,21 @@ use chrono::NaiveDate;
 /// Parses a string that represents a date. When a date
 /// is unable to be determined, return `None`. 
 fn flexible_date_parse(text: &str) -> Option<NaiveDate> {
-    todo!();
+
+    let formats = vec![
+        "%Y-%m-%d",
+        "%Y/%b/%d",
+        "%d.%b.%Y",
+        "%b.%d.%Y",
+    ];
+
+    for format in formats {
+        if let Ok(result) = NaiveDate::parse_from_str(text, format) {
+            return Some(result);
+        }        
+    }
+
+    None
 }
 
 fn main() {
